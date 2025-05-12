@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Feliz Dia das Mães</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background: pink;
+    background-image: url('https://www.transparenttextures.com/patterns/hearts.png');
+    background-repeat: repeat;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    color: #880e4f;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  h1, p, .cleo {
+    display: none;
+  }
+
+  h1 {
+    color: #d63384;
+    font-size: 2.5rem;
+    margin-top: 20px;
+    animation: pop 0.5s forwards;
+  }
+
+  p {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 10px 20px;
+    animation: fade 1s forwards;
+  }
+
+  button {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    background-color: #ff69b4;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px #c2185b;
+    transition: 0.2s;
+    margin-top: 30px;
+  }
+
+  button:active {
+    box-shadow: 0 2px #c2185b;
+    transform: translateY(2px);
+  }
+
+  canvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+  }
+
+  .cleo {
+    margin-top: 30px;
+    animation: fade 1.5s forwards;
+  }
+
+  .cleo img {
+    width: 250px;
+    height: auto;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }
+
+  .cleo-texto {
+    margin-top: 10px;
+    font-size: 1rem;
+    color: #6a1b9a;
+    padding: 0 15px;
+  }
+
+  @keyframes pop {
+    0% { transform: scale(0); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  @keyframes fade {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<h1>Feliz Dia das Mães! 💖</h1>
+
+<p>Sou muito grato por você existir, mãe. Você é a melhor mãe do mundo.  
+Mesmo que hoje estejamos passando por momentos difíceis, eu tenho certeza que os dias tristes e de choro vão se transformar em dias de felicidade e sorriso no rosto.  
+<br><br>Ass: Pedão, o melhor filho do mundo! 💙</p>
+
+<div class="cleo">
+  <img src="cléo.png" alt="Cléozinha">
+  <div class="cleo-texto">
+    Mãe, eu, sua Cléozinha, fui a gatinha mais feliz do mundo ao seu lado.  
+    Eu não quero ver você com esses olhos de choro. Você foi a melhor mãe do mundo para mim!  
+    E saiba que mesmo após minha partida, eu te vejo todo dia daqui do céu te mandando energias positivas.  
+    Ter sido sua filha pet foi a melhor coisa que papai do céu poderia me dar.  
+    Pode ter certeza que um dia nós vamos nos reencontrar.  
+    <br><br>Te amo mamãe 💕  
+    <br>Ass: Com carinho e ronrom, Cléozinha! 🐾
+  </div>
+</div>
+
+<button id="botao">Clique aqui</button>
+<canvas id="canvas"></canvas>
+
+<script>
+const botao = document.getElementById('botao');
+const texto = document.querySelector('h1');
+const mensagem = document.querySelector('p');
+const cleo = document.querySelector('.cleo');
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
+botao.addEventListener('click', () => {
+  texto.style.display = 'block';
+  mensagem.style.display = 'block';
+  cleo.style.display = 'block';
+  botao.style.display = 'none';
+  explodeParticles();
+});
+
+function explodeParticles() {
+  let particles = [];
+  const count = 80;
+  const colors = ['#ff69b4', '#ff1493', '#ffc0cb'];
+
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x: canvas.width/2,
+      y: canvas.height/2,
+      vx: (Math.random() - 0.5) * 10,
+      vy: (Math.random() - 0.5) * 10,
+      size: Math.random() * 6 + 4,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      life: 100
+    });
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+      p.x += p.vx;
+      p.y += p.vy;
+      p.life--;
+      p.size *= 0.96;
+    });
+    particles = particles.filter(p => p.life > 0 && p.size > 0.5);
+    if (particles.length > 0) {
+      requestAnimationFrame(animate);
+    }
+  }
+
+  animate();
+}
+</script>
+
+</body>
+</html>
